@@ -15,31 +15,30 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("ToolBox")
         self.setFixedSize(QSize(900, 500))
 
-        # Create the main widget and layout
+       
         main_widget = QWidget(self)
         main_layout = QVBoxLayout(main_widget)
-        main_layout.setContentsMargins(10, 10, 10, 10)
         main_layout.setSpacing(20)
 
-        # Add the button container with buttons
+       
         button_container = QVBoxLayout()
         button_container.setAlignment(Qt.AlignCenter)
 
-        # Create rows of buttons
+      
         button_row_1 = QHBoxLayout()
         button_row_1.setSpacing(20)  # Space between buttons
         button_row_2 = QHBoxLayout()
         button_row_2.setSpacing(20)
 
-        # Create buttons using the ModernButton class
-        button1 = ShortcutButton(text="OBLI", window=self, widget=packet_weight_checker, color="#00ADB5")
+       
+        button1 = ShortcutButton(text="OBLI", window=self, widget=packet_weight_checker, color="#ff661a")
         button2 = ShortcutButton(text="RESIZE", window=self, color="#E84545")
-        button3 = ShortcutButton(text="PERCE", window=self)
-        button4 = ShortcutButton(text="DIVE", window=self)
+        button3 = ShortcutButton(text="PERCE", window=self, color="#e600e6")
+        button4 = ShortcutButton(text="DIVE", window=self, color="#00ADB5")
         button5 = ShortcutButton(text="Widget5", window=self)
         button6 = ShortcutButton(text="Widget6", window=self)
 
-        # Add buttons to rows
+       
         button_row_1.addWidget(button1)
         button_row_1.addWidget(button2)
         button_row_1.addWidget(button3)
@@ -47,23 +46,22 @@ class MainWindow(QMainWindow):
         button_row_2.addWidget(button5)
         button_row_2.addWidget(button6)
 
-        # Add rows to the button container
+     
         button_container.addLayout(button_row_1)
         button_container.addLayout(button_row_2)
 
-        # Add the button container to the main layout
+       
         main_layout.addLayout(button_container)
 
-        # Add the footer at the bottom
+       
         footer = self.create_footer()
         main_layout.addWidget(footer)
 
-        # Set the central widget and center the window
+       
         self.setCentralWidget(main_widget)
         self.center_window()
 
     def create_footer(self):
-        # Create a footer widget
         footer = QFrame()
         footer.setFixedHeight(30)
         footer.setStyleSheet("""
@@ -75,11 +73,9 @@ class MainWindow(QMainWindow):
             }
         """)
         footer_layout = QVBoxLayout(footer)
-        footer_layout.setContentsMargins(10, 0, 10, 0)  # Margins for the footer content
         footer_layout.setAlignment(Qt.AlignCenter)
 
-        # Add label to the footer
-        footer_label = QLabel("© 2024 ToolBox | All Rights Reserved")
+        footer_label = QLabel("© 2024 SaiToolBox | All Rights Reserved")
         footer_label.setAlignment(Qt.AlignCenter)
         footer_layout.addWidget(footer_label)
 
@@ -105,7 +101,5 @@ packet_weight_checker = PacketWeightChecker()
 
 # Create the main window instance
 window = MainWindow()
-
-# Show the window
 window.show()
 app.exec_()

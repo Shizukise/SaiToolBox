@@ -85,7 +85,7 @@ class PacketWeightChecker(QMainWindow):
         main_layout.addLayout(content_layout)
 
         # Footer Section
-        footer = QLabel("© 2024 SAIToolBox")
+        footer = QLabel("© 2024 SaiToolBox | All Rights Reserved")
         footer.setStyleSheet(f"""
             background-color: #393E46;
             color: white;

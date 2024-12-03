@@ -10,7 +10,7 @@ class ShortcutButton(QPushButton):
         self.widget = widget
         self.color = color
 
-        self.setFixedHeight(50)
+        self.setFixedHeight(40)
         self.setFixedWidth(100)
         self.setStyleSheet(f"""
             QPushButton {{
