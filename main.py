@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         layout.setAlignment(Qt.AlignCenter)  # Center the layout contents
         self.setCentralWidget(main_widget)
 
-        button1 = ShortcutButton(text="Packet Weight Check", window=self, widget=packet_weight_checker, color="#00ADB5")
+        button1 = ShortcutButton(text="OBLI", window=self, widget=packet_weight_checker, color="#00ADB5")
         button2 = ShortcutButton(text="Pdf Resize", window=self, color="#E84545")
         button3 = ShortcutButton(text="Add piercing contour", window=self)
         button4 = ShortcutButton(text="Widget4", window=self)

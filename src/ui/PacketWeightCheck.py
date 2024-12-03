@@ -1,14 +1,102 @@
-from PySide2.QtWidgets import QPushButton, QWidget, QVBoxLayout, QMainWindow, QApplication
-from PySide2.QtCore import QSize
+from PySide2.QtWidgets import (
+    QMainWindow, QApplication, QPushButton, QLabel,
+    QVBoxLayout, QHBoxLayout, QWidget, QFrame
+)
+from PySide2.QtCore import Qt, QSize
 
-#### Packet weight checker : This tool will take a pdf file as input (Order Invoice), and will calculate the weight of a package based on ordered items #####
 
 class PacketWeightChecker(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setFixedSize(1280, 620)
-        button = QPushButton("Hello!")
-        self.setCentralWidget(button)
+        self.setWindowTitle("Packet Weight Checker")
+
+        # Create the central widget
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+
+        # Main vertical layout
+        main_layout = QVBoxLayout(central_widget)
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(10)
+
+        # Header Section
+        header = QLabel("OBLI")
+        header.setStyleSheet(f"""
+            background-color: #00ADB5;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px;
+        """)
+        header.setAlignment(Qt.AlignCenter)
+        header.setFixedHeight(50)
+        main_layout.addWidget(header)
+
+        # Main Content Section
+        content_layout = QHBoxLayout()
+        content_layout.setSpacing(10)
+
+        # Sidebar
+        sidebar = QFrame()
+        sidebar.setStyleSheet(f"background-color: white;")
+        sidebar.setFixedWidth(300)
+        content_layout.addWidget(sidebar)
+
+        check_weight_button = QPushButton("Verifié Poid",sidebar)
+        check_weight_button.setGeometry(50,150,200,50)
+        check_weight_button.setStyleSheet(f"""
+                    QPushButton {{
+                        background-color: #00ADB5;
+                        color: white;  
+                        font-family: 'Arial', sans-serif;
+                        font-weight: bold;
+                        font-size: 16px;
+                    }}
+
+                    QPushButton:hover {{
+                        background-color: #00f2ff;  
+                        color: white; 
+                    }}
+                """)
+
+        upload_bl_button = QPushButton("Upload Bl", sidebar)
+        upload_bl_button.setGeometry(50,220,200,50)
+        upload_bl_button.setStyleSheet(f"""
+                    QPushButton {{
+                        background-color: #00ADB5;
+                        color: white;  
+                        font-family: 'Arial', sans-serif;
+                        font-weight: bold;
+                        font-size: 16px;
+                    }}
+
+                    QPushButton:hover {{
+                        background-color: #00f2ff;  
+                        color: white; 
+                    }}
+                """)
+
+        # Main Area
+        main_area = QFrame()
+        main_area.setStyleSheet("background-color: white;")
+        content_layout.addWidget(main_area)
+
+        main_layout.addLayout(content_layout)
+
+        # Footer Section
+        footer = QLabel("© 2024 SAIToolBox")
+        footer.setStyleSheet(f"""
+            background-color: #393E46;
+            color: white;
+            font-size: 14px;
+            padding: 5px;
+        """)
+        footer.setAlignment(Qt.AlignCenter)
+        footer.setFixedHeight(30)
+        main_layout.addWidget(footer)
+
+        # Center the window on the screen
         self.center_window()
 
     def center_window(self):
