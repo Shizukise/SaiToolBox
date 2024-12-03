@@ -17,69 +17,88 @@ class PacketWeightChecker(QMainWindow):
 
         # Main vertical layout
         main_layout = QVBoxLayout(central_widget)
-        main_layout.setContentsMargins(10, 10, 10, 10)
-        main_layout.setSpacing(10)
+        main_layout.setContentsMargins(0, 0, 0, 0)  # No margins for full-width design
+        main_layout.setSpacing(0)
 
         # Header Section
         header = QLabel("OBLI")
         header.setStyleSheet(f"""
-            background-color: #00ADB5;
+            background-color: #ff661a;
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
-            padding: 10px;
+            padding: 15px;
+            border-bottom: 2px solid #e55414;
         """)
         header.setAlignment(Qt.AlignCenter)
-        header.setFixedHeight(50)
+        header.setFixedHeight(60)
         main_layout.addWidget(header)
 
         # Main Content Section
         content_layout = QHBoxLayout()
-        content_layout.setSpacing(10)
+        content_layout.setSpacing(0)
 
         # Sidebar
         sidebar = QFrame()
-        sidebar.setStyleSheet(f"background-color: white;")
+        sidebar.setStyleSheet(f"""
+            background-color: #2f2f2f;
+            border-right: 2px solid #e55414;
+        """)
         sidebar.setFixedWidth(300)
-        content_layout.addWidget(sidebar)
 
-        check_weight_button = QPushButton("Verifié Poid",sidebar)
-        check_weight_button.setGeometry(50,150,200,50)
+        # Sidebar Layout
+        sidebar_layout = QVBoxLayout(sidebar)
+        sidebar_layout.setContentsMargins(20, 20, 20, 20)
+        sidebar_layout.setSpacing(15)
+
+        # Sidebar Buttons
+        check_weight_button = QPushButton("Check Weight")
         check_weight_button.setStyleSheet(f"""
-                    QPushButton {{
-                        background-color: #00ADB5;
-                        color: white;  
-                        font-family: 'Arial', sans-serif;
-                        font-weight: bold;
-                        font-size: 16px;
-                    }}
+            QPushButton {{
+                background-color: #ff661a;
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                padding: 10px;
+                border-radius: 8px;
+            }}
+            QPushButton:hover {{
+                background-color: #e55414;
+            }}
+            QPushButton:pressed {{
+                background-color: #c44712;
+            }}
+        """)
 
-                    QPushButton:hover {{
-                        background-color: #00f2ff;  
-                        color: white; 
-                    }}
-                """)
-
-        upload_bl_button = QPushButton("Upload Bl", sidebar)
-        upload_bl_button.setGeometry(50,220,200,50)
+        upload_bl_button = QPushButton("Upload BL")
         upload_bl_button.setStyleSheet(f"""
-                    QPushButton {{
-                        background-color: #00ADB5;
-                        color: white;  
-                        font-family: 'Arial', sans-serif;
-                        font-weight: bold;
-                        font-size: 16px;
-                    }}
+            QPushButton {{
+                background-color: #ff661a;
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                padding: 10px;
+                border-radius: 8px;
+            }}
+            QPushButton:hover {{
+                background-color: #e55414;
+            }}
+            QPushButton:pressed {{
+                background-color: #c44712;
+            }}
+        """)
 
-                    QPushButton:hover {{
-                        background-color: #00f2ff;  
-                        color: white; 
-                    }}
-                """)
+        # Add buttons to sidebar
+        sidebar_layout.addWidget(check_weight_button)
+        sidebar_layout.addWidget(upload_bl_button)
+        sidebar_layout.addStretch()  # Push buttons to the top
+        content_layout.addWidget(sidebar)
 
         # Main Area
         main_area = QFrame()
-        main_area.setStyleSheet("background-color: white;")
+        main_area.setStyleSheet("""
+            background-color: #f9f9f9;
+        """)
         content_layout.addWidget(main_area)
 
         main_layout.addLayout(content_layout)
@@ -87,13 +106,14 @@ class PacketWeightChecker(QMainWindow):
         # Footer Section
         footer = QLabel("© 2024 SaiToolBox | All Rights Reserved")
         footer.setStyleSheet(f"""
-            background-color: #393E46;
+            background-color: #2f2f2f;
             color: white;
             font-size: 14px;
-            padding: 5px;
+            padding: 10px;
+            border-top: 2px solid #e55414;
         """)
         footer.setAlignment(Qt.AlignCenter)
-        footer.setFixedHeight(30)
+        footer.setFixedHeight(40)
         main_layout.addWidget(footer)
 
         # Center the window on the screen
