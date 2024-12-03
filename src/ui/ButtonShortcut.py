@@ -1,40 +1,38 @@
 from PySide2.QtWidgets import QPushButton, QWidget, QVBoxLayout, QMainWindow
 from PySide2.QtCore import QSize
 
-class ShortcutButton(QWidget):
+class ShortcutButton(QPushButton):
 
-    def __init__(self,text,window,widget=None,color="#393E46"):  #The construct accepts the main window , and the widget that will be opened when clicked
-        super().__init__()
+    def __init__(self,text,window,widget=None,color="#393E46",parent=None):  #The construct accepts the main window , and the widget that will be opened when clicked
+        super().__init__(text,parent)
 
         self.main_window = window
         self.widget = widget
         self.color = color
 
-        button = QPushButton(f"{text}")
-        button.setFixedSize(175,175)
-        layout = QVBoxLayout(self)
-        layout.addWidget(button)
-        self.setLayout(layout)
-        
+        self.setFixedHeight(50)
+        self.setFixedWidth(100)
+        self.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {color};
+                border: none;
+                color: white;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 10px 20px;
+                border-radius: 10px;
+            }}
+            QPushButton:hover {{
+                background-color: #007C91;  /* Slightly darker shade on hover */
+            }}
+            QPushButton:pressed {{
+                background-color: #005F6B;  /* Even darker when pressed */
+            }}
+        """)
 
-        button.clicked.connect(self.the_button_was_clicked)
-        button.setStyleSheet(f"""
-                    QPushButton {{
-                        background-color: #EEEEEE;
-                        border: 2px solid {self.color};  /* Orange border */
-                        color: {self.color};  /* Text color matches the border */
-                        font-family: 'Arial', sans-serif;
-                        font-weight: bold;
-                        font-size: 16px;
-                        border-radius: 8px;
-                    }}
+        self.clicked.connect(self.the_button_was_clicked)
 
-                    QPushButton:hover {{
-                        background-color: {self.color};  /* Hover background becomes orange */
-                        color: white;  /* Text becomes white */
-                    }}
-                """)
-            
     def the_button_was_clicked(self):
         if self.widget != None:
             self.widget.show()
