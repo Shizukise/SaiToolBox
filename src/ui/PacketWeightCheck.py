@@ -11,7 +11,8 @@ class PacketWeightChecker(QMainWindow):
         super().__init__()
         self.setFixedSize(1280, 620)
         self.setWindowTitle("Packet Weight Checker")
-       
+        self.on_hold = []
+
         # Create the central widget
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
@@ -55,13 +56,18 @@ class PacketWeightChecker(QMainWindow):
         sidebar_layout.setContentsMargins(20, 20, 20, 20)
         sidebar_layout.setSpacing(15)
 
+
+        #development button
+        development_buton = QPushButton("Develop")
+        development_buton.clicked.connect(lambda: print(self.on_hold))
+
         # Sidebar Buttons
         ##Check weight button
         check_weight_button = QPushButton("Verifiée Poids")
         check_weight_button.setStyleSheet(package_weight_check_button_style)
         """This button runs on all loaded pdf files, and extracts the weight calculated from each one
             being then rendered on the main area at the right side of the screen. Or, it will run on selected files only."""
-        check_weight_button.clicked.connect(self.operator.calculate_weights_from_pdf)
+        check_weight_button.clicked.connect(lambda: self.operator.calculate_weights_from_pdf(parent_list=self.on_hold))
         
 
         ##Upload files button
@@ -71,11 +77,12 @@ class PacketWeightChecker(QMainWindow):
             files need to be a certain format to be valid (depending on user specifications)
             for this app they will be order invoices with articles, this is where we will get our quantities and
             articles that have been shipped, and from there our estimated weight for a package"""
-        upload_bl_button.clicked.connect(lambda: self.operator.upload_files(self))
+        upload_bl_button.clicked.connect(self.upload_files_and_render)
 
         # Add buttons to sidebar
         sidebar_layout.addWidget(check_weight_button)
         sidebar_layout.addWidget(upload_bl_button)
+        sidebar_layout.addWidget(development_buton)   ####DEVELOPMENT################
 
         # Scrollable area to show file names
         self.file_names_scroll_area = QScrollArea()
@@ -110,11 +117,25 @@ class PacketWeightChecker(QMainWindow):
         footer.setFixedHeight(40)
         main_layout.addWidget(footer)
 
-
-
-
+         #render on memory
+        self.operator.folder_reader(self.on_hold)
+        self.render_on_hold(self.file_names_layout)
         # Center the window on the screen
-        self.center_window()
+        self.center_window()   
+
+    def upload_files_and_render(self):
+        self.operator.upload_files(self)
+        self.operator.folder_reader(self.on_hold)
+        self.render_on_hold(self.file_names_layout)
+
+    def render_on_hold(self,parent):
+        for i in reversed(range(parent.count())):
+            widget = parent.itemAt(i).widget()
+            if widget is not None:
+                widget.deleteLater()
+        for filename in self.on_hold:
+            name = QLabel(f"{filename}")
+            parent.addWidget(name) 
 
     def center_window(self):
         """ Visual only, this centers the window on the screen when opened"""
@@ -138,9 +159,9 @@ class FileOperator():
         self.parent = parent
         self.pdf_files = []
     
-    def calculate_weights_from_pdf(self):
+    def calculate_weights_from_pdf(self,parent_list):
         self.pdf_files = []
-        self.folder_reader()
+        self.folder_reader(parent_list=parent_list)  #Carefull, now its making duplicates
         print(self.pdf_files)
 
     def upload_files(self, parent):
@@ -160,12 +181,13 @@ class FileOperator():
                     shutil.copy(file_path, destination_path)
                 QMessageBox.information(parent, "Téléversement réussi", f"Le fichier a été téléversé.")
             except Exception as e:
-                QMessageBox.critical(parent, "Échec du téléversement", f"Une erreur s'est produite : {str(e)}")
+                QMessageBox.critical(parent, "Exception", f"{str(e)}")
         else:
             QMessageBox.warning(parent, "Aucun fichier sélectionné", "Veuillez sélectionner un fichier à téléverseur.")
 
-    def folder_reader(self):
+    def folder_reader(self,parent_list):
         for filename in os.listdir(self.upload_folder):
-            if filename.endswith('.pdf') and filename.startswith("BL"):
+            if filename.endswith('.pdf'):                        #) and filename.startswith("BL")
                 self.pdf_files.append(os.path.join(filename))    #self.upload_folder
-    
+                if filename not in parent_list:
+                    parent_list.append(filename)
