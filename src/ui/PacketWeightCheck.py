@@ -133,8 +133,8 @@ class PacketWeightChecker(QMainWindow):
             widget = parent.itemAt(i).widget()
             if widget is not None:
                 widget.deleteLater()
-        for filename in self.on_hold:
-            name = QLabel(f"{filename}")
+        for i in reversed(range(len(self.on_hold))):
+            name = QLabel(f"{self.on_hold[i]}")
             parent.addWidget(name) 
 
     def center_window(self):
