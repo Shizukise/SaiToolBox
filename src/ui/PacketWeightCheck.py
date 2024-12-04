@@ -11,7 +11,7 @@ class PacketWeightChecker(QMainWindow):
         super().__init__()
         self.setFixedSize(1280, 620)
         self.setWindowTitle("Packet Weight Checker")
-
+       
         # Create the central widget
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
@@ -136,9 +136,12 @@ class FileOperator():
         self.test = test
         self.upload_folder = "src/data/BlInMemory"
         self.parent = parent
+        self.pdf_files = []
     
     def calculate_weights_from_pdf(self):
-        print(self.test)
+        self.pdf_files = []
+        self.folder_reader()
+        print(self.pdf_files)
 
     def upload_files(self, parent):
         """ Function connected to the upload file button.
@@ -160,3 +163,9 @@ class FileOperator():
                 QMessageBox.critical(parent, "Échec du téléversement", f"Une erreur s'est produite : {str(e)}")
         else:
             QMessageBox.warning(parent, "Aucun fichier sélectionné", "Veuillez sélectionner un fichier à téléverseur.")
+
+    def folder_reader(self):
+        for filename in os.listdir(self.upload_folder):
+            if filename.endswith('.pdf') and filename.startswith("BL"):
+                self.pdf_files.append(os.path.join(filename))    #self.upload_folder
+    
