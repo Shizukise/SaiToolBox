@@ -2,7 +2,6 @@ import sys
 import os
 from PySide2.QtCore import QSize, Qt
 from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QPushButton
-
 from src.ui.ButtonShortcut import ShortcutButton
 from src.ui.PacketWeightCheck import PacketWeightChecker
 
