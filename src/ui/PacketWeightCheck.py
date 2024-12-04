@@ -1,7 +1,7 @@
 import os, shutil
 from PySide2.QtWidgets import (
     QMainWindow, QApplication, QPushButton, QLabel,
-    QVBoxLayout, QHBoxLayout, QWidget, QFrame, QFileDialog,QMessageBox
+    QVBoxLayout, QHBoxLayout, QWidget, QFrame, QFileDialog, QMessageBox, QScrollArea, QVBoxLayout
 )
 from PySide2.QtCore import Qt, QSize
 from src.ui.styles import package_weight_check_button_style, upload_button_style
@@ -76,7 +76,16 @@ class PacketWeightChecker(QMainWindow):
         # Add buttons to sidebar
         sidebar_layout.addWidget(check_weight_button)
         sidebar_layout.addWidget(upload_bl_button)
-        sidebar_layout.addStretch()  # Push buttons to the top
+
+        # Scrollable area to show file names
+        self.file_names_scroll_area = QScrollArea()
+        self.file_names_scroll_area.setWidgetResizable(True)
+        self.file_names_widget = QWidget()
+        self.file_names_layout = QVBoxLayout(self.file_names_widget)
+        self.file_names_layout.setSpacing(10)
+
+        self.file_names_scroll_area.setWidget(self.file_names_widget)
+        sidebar_layout.addWidget(self.file_names_scroll_area)
         content_layout.addWidget(sidebar)
 
         # Main Area
@@ -101,6 +110,9 @@ class PacketWeightChecker(QMainWindow):
         footer.setFixedHeight(40)
         main_layout.addWidget(footer)
 
+
+
+
         # Center the window on the screen
         self.center_window()
 
@@ -117,10 +129,10 @@ class PacketWeightChecker(QMainWindow):
         # Move the window to the calculated position
         self.move(x, y)
 
-    
+
 class FileOperator():
 
-    def __init__(self,parent,test="TEST"):
+    def __init__(self, parent, test="TEST"):
         self.test = test
         self.upload_folder = "src/data/BlInMemory"
         self.parent = parent
@@ -131,15 +143,13 @@ class FileOperator():
     def upload_files(self, parent):
         """ Function connected to the upload file button.
             this opens a QFileDialog box that accepts pdfs only
-            and later saves it to ../data/BlInMemory
-            Functionality of this function should consist only of file upload and, after verification, deleting or saving
-            it to desired location acordingly"""
+            and later saves it to src/data/BlInMemory
+        """
         
         file_paths, _ = QFileDialog.getOpenFileNames(parent, "Sélectionnez un fichier", "", ";Fichiers PDF (*.pdf)")
         if file_paths:
             try:
                 for file_path in file_paths:
-                    # Get the file name and construct the destination path
                     file_name = os.path.basename(file_path)
                     destination_path = os.path.join(self.upload_folder, file_name)
                     # Ensure the upload folder exists
@@ -149,5 +159,4 @@ class FileOperator():
             except Exception as e:
                 QMessageBox.critical(parent, "Échec du téléversement", f"Une erreur s'est produite : {str(e)}")
         else:
-            QMessageBox.warning(parent, "Aucun fichier sélectionné", "Veuillez sélectionner un fichier à téléverser.")
-
+            QMessageBox.warning(parent, "Aucun fichier sélectionné", "Veuillez sélectionner un fichier à téléverseur.")
