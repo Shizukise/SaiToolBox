@@ -129,25 +129,24 @@ class FileOperator():
         print(self.test)
 
     def upload_files(self, parent):
-        # Open a file dialog to select files
-        file_path, _ = QFileDialog.getOpenFileName(parent, "Sélectionnez un fichier", "", ";Fichiers PDF (*.pdf)")
-
-        if file_path:
+        """ Function connected to the upload file button.
+            this opens a QFileDialog box that accepts pdfs only
+            and later saves it to ../data/BlInMemory
+            Functionality of this function should consist only of file upload and, after verification, deleting or saving
+            it to desired location acordingly"""
+        
+        file_paths, _ = QFileDialog.getOpenFileNames(parent, "Sélectionnez un fichier", "", ";Fichiers PDF (*.pdf)")
+        if file_paths:
             try:
-                # Get the file name and construct the destination path
-                file_name = os.path.basename(file_path)
-                destination_path = os.path.join(self.upload_folder, file_name)
-
-                # Ensure the upload folder exists
-                os.makedirs(self.upload_folder, exist_ok=True)
-
-                # Copy the file to the destination folder
-                shutil.copy(file_path, destination_path)
-
-                # Show success message
+                for file_path in file_paths:
+                    # Get the file name and construct the destination path
+                    file_name = os.path.basename(file_path)
+                    destination_path = os.path.join(self.upload_folder, file_name)
+                    # Ensure the upload folder exists
+                    os.makedirs(self.upload_folder, exist_ok=True)
+                    shutil.copy(file_path, destination_path)
                 QMessageBox.information(parent, "Téléversement réussi", f"Le fichier a été téléversé.")
             except Exception as e:
-                # Show error message if something goes wrong
                 QMessageBox.critical(parent, "Échec du téléversement", f"Une erreur s'est produite : {str(e)}")
         else:
             QMessageBox.warning(parent, "Aucun fichier sélectionné", "Veuillez sélectionner un fichier à téléverser.")
