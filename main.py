@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
 
        
         button1 = ShortcutButton(text="OBLI", window=self, widget=packet_weight_checker, color="#ff661a")
-        button2 = ShortcutButton(text="RESIZE", window=self, color="#E84545")
+        button2 = ShortcutButton(text="RESIZE", window=self, widget=resize_pdf,  color="#E84545")
         button3 = ShortcutButton(text="PERCE", window=self, color="#e600e6")
         button4 = ShortcutButton(text="DIVE", window=self, color="#00ADB5")
         button5 = ShortcutButton(text="Widget5", window=self)
@@ -97,6 +97,7 @@ app = QApplication([])
 
 # This creates the widget for the packet weight checker
 packet_weight_checker = PacketWeightChecker()
+resize_pdf = ResizePdf()
 
 # Create the main window instance
 window = MainWindow()
