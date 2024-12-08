@@ -1,12 +1,46 @@
 import os, shutil
+import fitz
 from PySide2.QtWidgets import (
     QMainWindow, QApplication, QPushButton, QLabel,
-    QVBoxLayout, QHBoxLayout, QWidget, QFrame, QFileDialog, QMessageBox, QScrollArea, QVBoxLayout
+    QVBoxLayout, QHBoxLayout, QWidget, QFrame, QFileDialog, QMessageBox, QScrollArea, QVBoxLayout,QDialog
 )
 from src.utils.ListItem import ListItem
 from PySide2.QtCore import Qt, QSize
 from src.ui.styles import upload_button_styleResize, resize_button
 
+
+class ResizeConfirmationDialog(QDialog):
+    def __init__(self, format, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Confirmer redimensionnement")
+        self.setFixedSize(300, 150)
+
+        # Layout for the dialog
+        layout = QVBoxLayout(self)
+
+        # Label for the message
+        self.message_label = QLabel(f"Voulez-vous redimensionner les fichiers sélectionnés en {format} ?", self)
+        self.message_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.message_label)
+
+        # Buttons
+        button_layout = QHBoxLayout()
+        
+        # Yes button
+        self.yes_button = QPushButton("Oui", self)
+        self.yes_button.clicked.connect(self.accept)
+        button_layout.addWidget(self.yes_button)
+
+        # No button
+        self.no_button = QPushButton("Non", self)
+        self.no_button.clicked.connect(self.reject)
+        button_layout.addWidget(self.no_button)
+
+        layout.addLayout(button_layout)
+
+    def exec_(self):
+        """Executes the dialog and returns the result"""
+        return super().exec_()
 
 class ResizePdf(QMainWindow):
     def __init__(self):
@@ -59,7 +93,7 @@ class ResizePdf(QMainWindow):
         sidebar_layout = QVBoxLayout(sidebar)
         sidebar_layout.setContentsMargins(20, 20, 20, 20)
 
-        upload_bl_button = QPushButton("Upload BL")
+        upload_bl_button = QPushButton("Télécharger PDF")
         upload_bl_button.setStyleSheet(upload_button_styleResize)
         """This will be where the user clicks to upload files from computer. 
             files need to be a certain format to be valid (depending on user specifications)
@@ -125,6 +159,12 @@ class ResizePdf(QMainWindow):
         ResizeToA2Button.setStyleSheet(resize_button)
         ResizeToA1Button.setStyleSheet(resize_button)
         ResizeToA0Button.setStyleSheet(resize_button)
+
+        ResizeToA4Button.clicked.connect(lambda: self.ask_for_resize("A4"))
+        ResizeToA3Button.clicked.connect(lambda: self.ask_for_resize("A3"))
+        ResizeToA2Button.clicked.connect(lambda: self.ask_for_resize("A2"))
+        ResizeToA1Button.clicked.connect(lambda: self.ask_for_resize("A1"))
+        ResizeToA0Button.clicked.connect(lambda: self.ask_for_resize("A0"))
 
         button_layout.addWidget(ResizeToA4Button)
         button_layout.addWidget(ResizeToA3Button)
@@ -194,6 +234,21 @@ class ResizePdf(QMainWindow):
                 del self.currently_selected[file_name]
         self.files_selected_label.setText(f"Actuellement {len(self.currently_selected)} fichiers sélectionnés")
 
+    def ask_for_resize(self, format):
+        if len(self.currently_selected) == 0:
+            QMessageBox.warning(self, "Aucun fichier sélectionné", "Veuillez sélectionner des fichiers à redimensionner.")
+        else:
+            # Create and show custom confirmation dialog
+            dialog = ResizeConfirmationDialog(format, self)
+            result = dialog.exec_()
+
+            # Check dialog result
+            if result == QDialog.Accepted:  # User clicked 'Yes'
+                self.operator.resizeFiles(self, format, self.currently_selected)
+                QMessageBox.information(self, "Redimensionnement réussi", f"Les fichiers ont été redimensionnés en {format}.")
+            else:  # User clicked 'No'
+                print("User selected 'No' or canceled.")
+
 
     def center_window(self):
         """Visual only, this centers the window on the screen when opened"""
@@ -215,6 +270,23 @@ class FileOperator:
         self.upload_folder = "src/data/PreResize"
         self.parent = parent
         self.pdf_files = []
+        self.output_path = "src/data/PostResize"
+        self.widths_points = {
+                        "A4": 595.28,
+                        "A3": 841.89,
+                        "A2": 1190.55,
+                        "A1": 1683.78,
+                        "A0": 2383.78
+                        }
+        self.heights_points = {
+                        "A4": 841.89,
+                        "A3": 1190.55,
+                        "A2": 1683.78,
+                        "A1": 2383.78,
+                        "A0": 3370.79
+                        }
+
+
 
     def upload_files(self, parent):
         """ Function connected to the upload file button. """
@@ -239,3 +311,25 @@ class FileOperator:
                 self.pdf_files.append(os.path.join(filename))
                 if filename not in parent_list:
                     parent_list.append(filename)
+
+    def resizeFiles(self,parent, format, files):
+        for file_name in files.keys():
+            file_path = os.path.join(self.upload_folder, file_name)
+            if os.path.exists(file_path):
+                doc = fitz.open(file_path)
+                new_doc = fitz.open()
+                for page in doc:
+                    current_rectangle = page.rect
+                    scale_x = self.widths_points[format] / current_rectangle.width
+                    scale_y = self.heights_points[format] / current_rectangle.height
+                    scale = min(scale_x, scale_y)
+                    matrix = fitz.Matrix(scale, scale)
+                    new_page = new_doc.new_page(width=self.widths_points[format], height=self.heights_points[format])
+                    new_page.show_pdf_page(new_page.rect, doc, page.number, matrix)
+                new_doc.save(os.path.join(self.output_path, f"{file_name[:-4]}-ResizeA4.pdf"))
+                new_doc.close()
+                doc.close()
+
+            else:
+                print(f"File not found: {file_path}")
+                
