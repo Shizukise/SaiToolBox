@@ -8,7 +8,6 @@ from PySide2.QtCore import Qt, QSize
 from src.ui.styles import upload_button_styleResize, resize_button
 
 
-
 class ResizePdf(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -16,6 +15,8 @@ class ResizePdf(QMainWindow):
         self.setWindowTitle("Packet Weight Checker")
         self.on_hold = []
         self.names = {}
+        self.currently_selected = {}
+        self.currently_selected_label = f"Actuellement {len(self.currently_selected)} fichiers sélectionnés"
 
         # Create the central widget
         central_widget = QWidget(self)
@@ -46,7 +47,6 @@ class ResizePdf(QMainWindow):
         content_layout = QHBoxLayout()
         content_layout.setSpacing(0)
 
-        
         # Sidebar
         sidebar = QFrame()
         sidebar.setStyleSheet(f"""
@@ -69,7 +69,7 @@ class ResizePdf(QMainWindow):
 
         sidebar_layout.addWidget(upload_bl_button)
 
-         # Scrollable area to show file names
+        # Scrollable area to show file names
         self.file_names_scroll_area = QScrollArea()
         self.file_names_scroll_area.setWidgetResizable(True)
         self.file_names_widget = QWidget()
@@ -85,6 +85,35 @@ class ResizePdf(QMainWindow):
             background-color: #f9f9f9;
         """)
 
+        # Main area layout
+        main_area_layout = QVBoxLayout(main_area)
+        main_area_layout.setContentsMargins(20, 20, 20, 20)
+        main_area_layout.setSpacing(10)
+
+        # Add description labels
+        description_label = QLabel("Sélectionnez un format pour redimensionner votre PDF")
+        description_label.setStyleSheet("""
+            color: #333;
+            font-size: 14px;
+            font-weight: normal;
+        """)
+        description_label.setAlignment(Qt.AlignCenter)
+        main_area_layout.addWidget(description_label, alignment=Qt.AlignTop)
+
+        # Add small label above buttons
+        self.files_selected_label = QLabel(self.currently_selected_label)   #Needs a class with a refresh method !!maybe!!
+        self.files_selected_label.setStyleSheet("""
+            color: #555;
+            font-size: 12px;
+        """)
+        self.files_selected_label.setAlignment(Qt.AlignCenter)
+        main_area_layout.addWidget(self.files_selected_label)
+
+        # Button Grid Layout
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(10)
+
+        # Format buttons
         ResizeToA4Button = QPushButton("A4")
         ResizeToA3Button = QPushButton("A3")
         ResizeToA2Button = QPushButton("A2")
@@ -97,22 +126,6 @@ class ResizePdf(QMainWindow):
         ResizeToA1Button.setStyleSheet(resize_button)
         ResizeToA0Button.setStyleSheet(resize_button)
 
-        main_area_layout = QVBoxLayout(main_area)
-        main_area_layout.setContentsMargins(20, 20, 20, 20)
-        main_area_layout.setSpacing(10)
-
-        description_label = QLabel("Sélectionnez un format pour redimensionner votre PDF")
-        description_label.setStyleSheet("""
-            color: #333;
-            font-size: 14px;
-            font-weight: normal;
-        """)
-        description_label.setAlignment(Qt.AlignCenter)
-        main_area_layout.addWidget(description_label, alignment=Qt.AlignTop)
-
-        # Button Grid Layout
-        button_layout = QHBoxLayout()
-        button_layout.setSpacing(10)
         button_layout.addWidget(ResizeToA4Button)
         button_layout.addWidget(ResizeToA3Button)
         button_layout.addWidget(ResizeToA2Button)
@@ -120,6 +133,13 @@ class ResizePdf(QMainWindow):
         button_layout.addWidget(ResizeToA0Button)
 
         main_area_layout.addLayout(button_layout)
+
+        # Add Download button below the format buttons
+        download_button = QPushButton("Télécharger")
+        download_button.setStyleSheet(resize_button)
+        download_button.clicked.connect(lambda: print(self.names))
+
+        main_area_layout.addWidget(download_button, alignment=Qt.AlignCenter)
 
         content_layout.addWidget(main_area)
         main_layout.addLayout(content_layout)
@@ -137,38 +157,37 @@ class ResizePdf(QMainWindow):
         footer.setFixedHeight(40)
         main_layout.addWidget(footer)
 
-         #render on memory
+        # Render on memory
         self.operator.folder_reader(self.on_hold)
         self.render_on_hold(self.file_names_layout)
-        # Center the window on the screen
-        self.center_window()   
 
-    
+        # Center the window on the screen
+        self.center_window()
+
     def upload_files_and_render(self):
         self.operator.upload_files(self)
         self.operator.folder_reader(self.on_hold)
         self.render_on_hold(self.file_names_layout)
 
-
     def render_on_hold(self, parent):
-        # Clear existing widgets
-        for i in reversed(range(parent.count())):
-            widget = parent.itemAt(i).widget()
-            if widget is not None:
-                widget.deleteLater()
+            # Clear existing widgets
+            for i in reversed(range(parent.count())):
+                widget = parent.itemAt(i).widget()
+                if widget is not None:
+                    widget.deleteLater()
 
-        # Add new widgets
-        for file_name in reversed(self.on_hold):  # Iterate over items in self.on_hold
-            name = ListItem(text=file_name)
-            self.names[name] = name
-            parent.addWidget(name)  # Add to layout
+            # Add new widgets
+            for file_name in reversed(self.on_hold):  # Iterate over items in self.on_hold
+                name = ListItem(text=file_name)
+                self.names[name.name] = name
+                parent.addWidget(name)
+            for name in self.names:
+                self.names[name].clicked.connect(lambda: self.names[name].setSelected())
+            self.files_selected_label.setText(f"Actuellement {len(self.currently_selected)} fichiers sélectionnés")
         
-        for name in self.names:
-            self.names[name].clicked.connect(lambda : self.names[name].setSelected())
-
 
     def center_window(self):
-        """ Visual only, this centers the window on the screen when opened"""
+        """Visual only, this centers the window on the screen when opened"""
         # Get screen geometry (the dimensions of the screen)
         screen_geometry = QApplication.primaryScreen().availableGeometry()
         # Get the dimensions of the main window
@@ -181,20 +200,15 @@ class ResizePdf(QMainWindow):
         self.move(x, y)
 
 
-
-class FileOperator():
-
+class FileOperator:
     def __init__(self, parent, test="TEST"):
         self.test = test
         self.upload_folder = "src/data/PreResize"
         self.parent = parent
         self.pdf_files = []
-    
+
     def upload_files(self, parent):
-        """ Function connected to the upload file button.
-            this opens a QFileDialog box that accepts pdfs only
-            and later saves it to src/data/PreResize
-        """  
+        """ Function connected to the upload file button. """
         file_paths, _ = QFileDialog.getOpenFileNames(parent, "Sélectionnez un fichier", "", ";Fichiers PDF (*.pdf)")
         if file_paths:
             try:
@@ -210,9 +224,9 @@ class FileOperator():
         else:
             QMessageBox.warning(parent, "Aucun fichier sélectionné", "Veuillez sélectionner un fichier à téléverseur.")
 
-    def folder_reader(self,parent_list):
+    def folder_reader(self, parent_list):
         for filename in os.listdir(self.upload_folder):
-            if filename.endswith('.pdf'):                        #) and filename.startswith("BL")
-                self.pdf_files.append(os.path.join(filename))    #self.upload_folder
+            if filename.endswith('.pdf'):
+                self.pdf_files.append(os.path.join(filename))
                 if filename not in parent_list:
                     parent_list.append(filename)

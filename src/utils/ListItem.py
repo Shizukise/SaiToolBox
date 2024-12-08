@@ -17,6 +17,7 @@ class ListItem(QLabel):
         """)
         self.setFixedSize(QSize(250, 30))
         self.selected = selected
+        self.name = text
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:  
@@ -46,3 +47,4 @@ class ListItem(QLabel):
             }
         """)
             self.selected = False
+            
