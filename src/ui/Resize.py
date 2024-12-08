@@ -137,7 +137,7 @@ class ResizePdf(QMainWindow):
         # Add Download button below the format buttons
         download_button = QPushButton("Télécharger")
         download_button.setStyleSheet(resize_button)
-        download_button.clicked.connect(lambda: print(self.names))
+        download_button.clicked.connect(lambda: print(self.currently_selected))
 
         main_area_layout.addWidget(download_button, alignment=Qt.AlignCenter)
 
@@ -181,10 +181,19 @@ class ResizePdf(QMainWindow):
                 name = ListItem(text=file_name)
                 self.names[name.name] = name
                 parent.addWidget(name)
-            for name in self.names:
-                self.names[name].clicked.connect(lambda: self.names[name].setSelected())
+                name.selection_changed.connect(self.handle_selection_changed) 
             self.files_selected_label.setText(f"Actuellement {len(self.currently_selected)} fichiers sélectionnés")
         
+
+    def handle_selection_changed(self, file_name, selected):
+        """This method updates the currently_selected dictionary and label."""
+        if selected:
+            self.currently_selected[file_name] = True
+        else:
+            if file_name in self.currently_selected:
+                del self.currently_selected[file_name]
+        self.files_selected_label.setText(f"Actuellement {len(self.currently_selected)} fichiers sélectionnés")
+
 
     def center_window(self):
         """Visual only, this centers the window on the screen when opened"""
