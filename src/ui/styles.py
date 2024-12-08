@@ -48,3 +48,22 @@ upload_button_styleResize =  """
                 background-color: #E84545;
             }
         """
+
+resize_button = """
+            QPushButton {
+                background-color: #E84545;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #D93C3C;
+            }
+            QPushButton:pressed {
+                background-color: #C43131;
+            }
+        """
+       

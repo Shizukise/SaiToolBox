@@ -3,6 +3,7 @@ from PySide2.QtWidgets import (
     QMainWindow, QApplication, QPushButton, QLabel,
     QVBoxLayout, QHBoxLayout, QWidget, QFrame, QFileDialog, QMessageBox, QScrollArea, QVBoxLayout
 )
+from src.utils.ListItem import ListItem
 from PySide2.QtCore import Qt, QSize
 from src.ui.styles import package_weight_check_button_style, upload_button_style
 
@@ -128,14 +129,17 @@ class PacketWeightChecker(QMainWindow):
         self.operator.folder_reader(self.on_hold)
         self.render_on_hold(self.file_names_layout)
 
-    def render_on_hold(self,parent):
+    def render_on_hold(self, parent):
+        # Clear existing widgets
         for i in reversed(range(parent.count())):
             widget = parent.itemAt(i).widget()
             if widget is not None:
                 widget.deleteLater()
-        for i in reversed(range(len(self.on_hold))):
-            name = QLabel(f"{self.on_hold[i]}")
-            parent.addWidget(name) 
+
+        # Add new widgets
+        for file_name in reversed(self.on_hold):  # Iterate over items in self.on_hold
+            name = ListItem(text=file_name)
+            parent.addWidget(name)  # Add to layout 
 
     def center_window(self):
         """ Visual only, this centers the window on the screen when opened"""

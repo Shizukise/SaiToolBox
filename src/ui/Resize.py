@@ -3,9 +3,10 @@ from PySide2.QtWidgets import (
     QMainWindow, QApplication, QPushButton, QLabel,
     QVBoxLayout, QHBoxLayout, QWidget, QFrame, QFileDialog, QMessageBox, QScrollArea, QVBoxLayout
 )
-from PySide2.QtCore import Qt, QSize
-from src.ui.styles import upload_button_styleResize
 from src.utils.ListItem import ListItem
+from PySide2.QtCore import Qt, QSize
+from src.ui.styles import upload_button_styleResize, resize_button
+
 
 
 class ResizePdf(QMainWindow):
@@ -14,6 +15,7 @@ class ResizePdf(QMainWindow):
         self.setFixedSize(1280, 620)
         self.setWindowTitle("Packet Weight Checker")
         self.on_hold = []
+        self.names = {}
 
         # Create the central widget
         central_widget = QWidget(self)
@@ -56,7 +58,6 @@ class ResizePdf(QMainWindow):
         # Sidebar Layout
         sidebar_layout = QVBoxLayout(sidebar)
         sidebar_layout.setContentsMargins(20, 20, 20, 20)
-        sidebar_layout.setSpacing(15)
 
         upload_bl_button = QPushButton("Upload BL")
         upload_bl_button.setStyleSheet(upload_button_styleResize)
@@ -73,7 +74,6 @@ class ResizePdf(QMainWindow):
         self.file_names_scroll_area.setWidgetResizable(True)
         self.file_names_widget = QWidget()
         self.file_names_layout = QVBoxLayout(self.file_names_widget)
-        self.file_names_layout.setSpacing(10)
 
         self.file_names_scroll_area.setWidget(self.file_names_widget)
         sidebar_layout.addWidget(self.file_names_scroll_area)
@@ -84,8 +84,44 @@ class ResizePdf(QMainWindow):
         main_area.setStyleSheet("""
             background-color: #f9f9f9;
         """)
-        content_layout.addWidget(main_area)
 
+        ResizeToA4Button = QPushButton("A4")
+        ResizeToA3Button = QPushButton("A3")
+        ResizeToA2Button = QPushButton("A2")
+        ResizeToA1Button = QPushButton("A1")
+        ResizeToA0Button = QPushButton("A0")
+
+        ResizeToA4Button.setStyleSheet(resize_button)
+        ResizeToA3Button.setStyleSheet(resize_button)
+        ResizeToA2Button.setStyleSheet(resize_button)
+        ResizeToA1Button.setStyleSheet(resize_button)
+        ResizeToA0Button.setStyleSheet(resize_button)
+
+        main_area_layout = QVBoxLayout(main_area)
+        main_area_layout.setContentsMargins(20, 20, 20, 20)
+        main_area_layout.setSpacing(10)
+
+        description_label = QLabel("Sélectionnez un format pour redimensionner votre PDF")
+        description_label.setStyleSheet("""
+            color: #333;
+            font-size: 14px;
+            font-weight: normal;
+        """)
+        description_label.setAlignment(Qt.AlignCenter)
+        main_area_layout.addWidget(description_label, alignment=Qt.AlignTop)
+
+        # Button Grid Layout
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(10)
+        button_layout.addWidget(ResizeToA4Button)
+        button_layout.addWidget(ResizeToA3Button)
+        button_layout.addWidget(ResizeToA2Button)
+        button_layout.addWidget(ResizeToA1Button)
+        button_layout.addWidget(ResizeToA0Button)
+
+        main_area_layout.addLayout(button_layout)
+
+        content_layout.addWidget(main_area)
         main_layout.addLayout(content_layout)
 
         # Footer Section
@@ -113,14 +149,23 @@ class ResizePdf(QMainWindow):
         self.operator.folder_reader(self.on_hold)
         self.render_on_hold(self.file_names_layout)
 
-    def render_on_hold(self,parent):
+
+    def render_on_hold(self, parent):
+        # Clear existing widgets
         for i in reversed(range(parent.count())):
             widget = parent.itemAt(i).widget()
             if widget is not None:
                 widget.deleteLater()
-        for i in reversed(range(len(self.on_hold))):
-            name = QLabel(f"{self.on_hold[i]}")
-            parent.addWidget(name) 
+
+        # Add new widgets
+        for file_name in reversed(self.on_hold):  # Iterate over items in self.on_hold
+            name = ListItem(text=file_name)
+            self.names[name] = name
+            parent.addWidget(name)  # Add to layout
+        
+        for name in self.names:
+            self.names[name].clicked.connect(lambda : self.names[name].setSelected())
+
 
     def center_window(self):
         """ Visual only, this centers the window on the screen when opened"""
