@@ -19,8 +19,9 @@ class ResizeConfirmationDialog(QDialog):
         layout = QVBoxLayout(self)
 
         # Label for the message
-        self.message_label = QLabel(f"Voulez-vous redimensionner les fichiers sélectionnés en {format} ?", self)
+        self.message_label = QLabel(f"Voulez vous redimensionner les fichiers sélectionnés en {format} ?", self)
         self.message_label.setAlignment(Qt.AlignCenter)
+        self.message_label.setWordWrap(True)  # Enable word wrap to avoid text being cut off
         layout.addWidget(self.message_label)
 
         # Buttons
@@ -41,6 +42,7 @@ class ResizeConfirmationDialog(QDialog):
     def exec_(self):
         """Executes the dialog and returns the result"""
         return super().exec_()
+
 
 class ResizePdf(QMainWindow):
     def __init__(self):
@@ -312,7 +314,7 @@ class FileOperator:
                 if filename not in parent_list:
                     parent_list.append(filename)
 
-    def resizeFiles(self,parent, format, files):
+    def resizeFiles(self, format, files):
         for file_name in files.keys():
             file_path = os.path.join(self.upload_folder, file_name)
             if os.path.exists(file_path):
