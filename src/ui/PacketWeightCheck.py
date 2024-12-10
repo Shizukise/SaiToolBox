@@ -159,7 +159,7 @@ class FileOperator():
 
     def __init__(self, parent, test="TEST"):
         self.test = test
-        self.upload_folder = "src/data/BlInMemory"
+        self.upload_folder = "/home/galopin/Wa Its/src/data/BlInMemory"
         self.parent = parent
         self.pdf_files = []
     

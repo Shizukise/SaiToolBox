@@ -246,7 +246,7 @@ class ResizePdf(QMainWindow):
 
             # Check dialog result
             if result == QDialog.Accepted:  # User clicked 'Yes'
-                self.operator.resizeFiles(self, format, self.currently_selected)
+                self.operator.resizeFiles(format, self.currently_selected)
                 QMessageBox.information(self, "Redimensionnement réussi", f"Les fichiers ont été redimensionnés en {format}.")
             else:  # User clicked 'No'
                 print("User selected 'No' or canceled.")
@@ -269,10 +269,10 @@ class ResizePdf(QMainWindow):
 class FileOperator:
     def __init__(self, parent, test="TEST"):
         self.test = test
-        self.upload_folder = "src/data/PreResize"
+        self.upload_folder = "/home/galopin/Wa Its/src/data/PreResize"
         self.parent = parent
         self.pdf_files = []
-        self.output_path = "src/data/PostResize"
+        self.output_path = "/home/galopin/Wa Its/src/data/PostResize"
         self.widths_points = {
                         "A4": 595.28,
                         "A3": 841.89,
@@ -328,7 +328,7 @@ class FileOperator:
                     matrix = fitz.Matrix(scale, scale)
                     new_page = new_doc.new_page(width=self.widths_points[format], height=self.heights_points[format])
                     new_page.show_pdf_page(new_page.rect, doc, page.number, matrix)
-                new_doc.save(os.path.join(self.output_path, f"{file_name[:-4]}-ResizeA4.pdf"))
+                new_doc.save(os.path.join(self.output_path, f"{file_name[:-4]}-Resize{format}.pdf"))
                 new_doc.close()
                 doc.close()
 
