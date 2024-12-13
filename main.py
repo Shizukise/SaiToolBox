@@ -4,6 +4,7 @@ from PySide2.QtCore import QSize, Qt
 from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QPushButton
 from src.ui.ButtonShortcut import ShortcutButton
 from src.ui.PacketWeightCheck import PacketWeightChecker
+from src.ui.DiverArticle import Dive
 from src.ui.Resize import ResizePdf
 
 os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = r'/home/galopin/Área de Trabalho/Projects/Wa Its/Wa_its_venv/lib/python3.11/site-packages/PySide2/Qt/plugins/platforms'
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
         button1 = ShortcutButton(text="OBLI", window=self, widget=packet_weight_checker, color="#ff661a")
         button2 = ShortcutButton(text="RESIZE", window=self, widget=resize_pdf,  color="#E84545")
         button3 = ShortcutButton(text="PERCE", window=self, color="#e600e6")
-        button4 = ShortcutButton(text="DIVE", window=self, color="#00ADB5")
+        button4 = ShortcutButton(text="DIVE", window=self, widget=dive, color="#00ADB5")
         button5 = ShortcutButton(text="Widget5", window=self)
         button6 = ShortcutButton(text="Widget6", window=self)
 
@@ -99,6 +100,7 @@ app = QApplication([])
 # This creates the widget for the packet weight checker
 packet_weight_checker = PacketWeightChecker()
 resize_pdf = ResizePdf()
+dive = Dive()
 
 # Create the main window instance
 window = MainWindow()
