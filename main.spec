@@ -10,6 +10,7 @@ a = Analysis(
        ('src/data', 'src/data'), 
        ('src/ui', 'src/ui'), 
        ('src/utils', 'src/utils'),
+       ('src/controllers','src/controllers'),
        ('src/data/BlInMemory', 'src/data/BlInMemory'),
        ('src/data/PreResize', 'src/data/PreResize'),
        ('src/data/PostResize', 'src/data/PostResize')],
