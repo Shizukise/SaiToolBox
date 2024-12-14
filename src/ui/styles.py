@@ -66,4 +66,122 @@ resize_button = """
                 background-color: #C43131;
             }
         """
-       
+
+
+# Header Style
+header_style = """
+    QLabel {
+        background-color: #242424;
+        color: #00ADB5;
+        font-size: 24px;
+        font-weight: bold;
+        padding: 10px 0;
+        border-bottom: 1px solid #00ADB5;
+    }
+"""
+
+# Footer Style
+footer_style = """
+    QLabel {
+        background-color: #2f2f2f;
+        color: #A0A0A0;
+        font-size: 12px;
+        padding: 10px 0;
+        border-top: 1px solid #00ADB5;
+    }
+"""
+
+# Input Style
+input_style = """
+    QLineEdit {
+        background-color: #f5f5f5;
+        border: 1px solid #B0B0B0;
+        border-radius: 8px;
+        padding: 10px;
+        color: #333;
+        font-size: 14px;
+    }
+
+    QLineEdit:focus {
+        border-color: #00ADB5;
+    }
+"""
+
+# ComboBox Style
+combo_box_style = """
+    QComboBox {
+        background-color: #f5f5f5;
+        border: 1px solid #B0B0B0;
+        border-radius: 8px;
+        padding: 8px;
+        color: #333;
+        font-size: 14px;
+    }
+
+    QComboBox:focus {
+        border-color: #00ADB5;
+    }
+"""
+
+# Button Style (with hover and pressed states)
+button_style = """
+    QPushButton {
+        background-color: #00ADB5;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        padding: 12px 24px;
+        border: none;
+    }
+
+    QPushButton:hover {
+        background-color: #009A9C;
+    }
+
+    QPushButton:pressed {
+        background-color: #007B7C;
+    }
+"""
+
+# Button Style for "Run Script" and "Generate File"
+run_button_style = """
+    QPushButton {
+        background-color: #00ADB5;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        padding: 12px 24px;
+        border: none;
+    }
+
+    QPushButton:hover {
+        background-color: #009A9C;
+    }
+
+    QPushButton:pressed {
+        background-color: #007B7C;
+    }
+"""
+
+# Button Style for Resize Button
+resize_button_style = """
+    QPushButton {
+        background-color: #E84545;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        padding: 10px 20px;
+        border: none;
+    }
+
+    QPushButton:hover {
+        background-color: #D93C3C;
+    }
+
+    QPushButton:pressed {
+        background-color: #C43131;
+    }
+"""

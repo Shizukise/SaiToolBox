@@ -5,7 +5,7 @@ from PySide2.QtWidgets import (
 from PySide2.QtCore import Qt
 from src.controllers.DiveScript import DiverScraper
 import pandas as pd
-
+from src.ui.styles import *
 
 class Dive(QMainWindow):
     def __init__(self):
@@ -14,30 +14,25 @@ class Dive(QMainWindow):
         self.setWindowTitle("DIVE")
         self.current_data = None
 
-        # Main layout for the window
+         # Main layout for the window
         central_widget = QWidget()
         main_layout = QVBoxLayout(central_widget)
         self.setCentralWidget(central_widget)
 
-        # Header
-        header = QLabel("DIVE Tool")
-        header.setStyleSheet("""
-            background-color: #242424;
-            color: #E84545;
-            font-size: 26px;
-            font-weight: bold;
-            padding: 15px;
-            border-bottom: 2px solid #e55414;
-        """)
-        header.setAlignment(Qt.AlignCenter)
-        header.setFixedHeight(60)
-        main_layout.addWidget(header)
+        # Set margins to zero to eliminate gaps on the sides
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
 
+        # Header
+        header = QLabel("DIVE Tool")
+        header.setStyleSheet(header_style)
+        header.setAlignment(Qt.AlignCenter)
+        header.setFixedHeight(60)
+        main_layout.addWidget(header)
 
         # Inputs Section
         input_section = QFrame()
+        input_section.setStyleSheet(input_style)
         input_layout = QVBoxLayout(input_section)
 
         # Identifiant
@@ -58,6 +53,7 @@ class Dive(QMainWindow):
         # Team Selection
         team_label = QLabel("Select Team:")
         self.team_selector = QComboBox()
+        self.team_selector.setStyleSheet(combo_box_style)
         self.team_selector.addItems(["Tous", "Jeremy", "Tepea", "Aurelien"])
         input_layout.addWidget(team_label)
         input_layout.addWidget(self.team_selector)
@@ -70,6 +66,8 @@ class Dive(QMainWindow):
 
         run_button = QPushButton("Run Script")
         generate_button = QPushButton("Generate File")
+        run_button.setStyleSheet(run_button_style)
+        generate_button.setStyleSheet(run_button_style)
         run_button.clicked.connect(self.run_script)
         generate_button.clicked.connect(self.generate_file)
 
@@ -80,13 +78,7 @@ class Dive(QMainWindow):
 
         # Footer
         footer = QLabel("© 2024 SaiToolBox | All Rights Reserved")
-        footer.setStyleSheet("""
-            background-color: #2f2f2f;
-            color: white;
-            font-size: 14px;
-            padding: 10px;
-            border-top: 2px solid #e55414;
-        """)
+        footer.setStyleSheet(footer_style)
         footer.setAlignment(Qt.AlignCenter)
         footer.setFixedHeight(40)
         main_layout.addWidget(footer)
@@ -121,8 +113,6 @@ class Dive(QMainWindow):
                     max_len = max(df[col].astype(str).map(len).max(), len(col)) + 2
                     column_letter = worksheet.cell(row=1, column=idx + 1).column_letter 
                     worksheet.column_dimensions[column_letter].width = max_len
-
-
 
     def center_window(self):
         """Centers the window on the screen when opened."""

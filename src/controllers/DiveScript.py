@@ -24,6 +24,38 @@ class DiverScraper():
         self.driver = webdriver.Chrome(service=self.service)
         self.specific_materials = set(["Dibond", "Dibond", "Dibond", "Plexi", "PVC3MM","entretoises"])
 
+    def clean_search_filters(self):
+        
+        numero_commande_input = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.ID, 'filter-ref'))
+        )
+        numero_commande_input.clear()
+        numero_ct = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.ID, "filter-ct-number"))
+        )
+        numero_ct.clear()
+        client_filer = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.ID , "filter-societe"))
+        )
+        client_filer.clear()
+        filter_site = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.ID, "filter-site"))
+        )
+        filter_site.clear()
+        filter_site_address = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.ID, "filter-site-address"))
+        )
+        filter_site_address.clear()
+        filter_site_contact = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.ID, "filter-site-contact"))
+        )
+        filter_site_contact.clear()
+        filter_date = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.ID, "filter-date"))
+        )
+        filter_date.clear()
+        filter_date.send_keys(Keys.RETURN)
+
     def apply_search_filters(self):
         try:
             statut_button = WebDriverWait(self.driver, 10).until(
@@ -169,6 +201,8 @@ class DiverScraper():
         password_box.send_keys(self.password)
         login_box.send_keys(Keys.RETURN)
         time.sleep(3)
+        self.clean_search_filters()
+        time.sleep(2)
         self.apply_search_filters()
         data = self.run_scraper()
         return data
