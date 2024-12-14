@@ -66,9 +66,10 @@ class Dive(QMainWindow):
 
         run_button = QPushButton("Run Script")
         generate_button = QPushButton("Generate File")
+        generate_button.setDisabled(True)
         run_button.setStyleSheet(run_button_style)
         generate_button.setStyleSheet(run_button_style)
-        run_button.clicked.connect(self.run_script)
+        run_button.clicked.connect(lambda : self.run_script(generate_button=generate_button))
         generate_button.clicked.connect(self.generate_file)
 
         button_layout.addWidget(run_button)
@@ -85,7 +86,7 @@ class Dive(QMainWindow):
 
         self.center_window()
 
-    def run_script(self):
+    def run_script(self,generate_button):
         # Placeholder functionality
         identifiant = self.identifiant_input.text()
         password = self.password_input.text()
@@ -93,6 +94,7 @@ class Dive(QMainWindow):
         print(f"Running script with identifiant: {identifiant}, team: {team}")
         scraper = DiverScraper(username=identifiant,password=password,team=team)
         self.current_data = scraper.run_script()
+        generate_button.setDisabled(False)
 
     def generate_file(self):
         if self.current_data:

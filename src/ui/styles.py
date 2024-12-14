@@ -163,6 +163,12 @@ run_button_style = """
     QPushButton:pressed {
         background-color: #007B7C;
     }
+    QPushButton:disabled {
+        background-color: #aaaaaa;
+        color: #666666;
+        border: none;
+    }
+
 """
 
 # Button Style for Resize Button
