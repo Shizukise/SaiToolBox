@@ -1,10 +1,10 @@
 import os, shutil
-from PySide2.QtWidgets import (
+from PySide6.QtWidgets import (
     QMainWindow, QApplication, QPushButton, QLabel,
     QVBoxLayout, QHBoxLayout, QWidget, QFrame, QFileDialog, QMessageBox, QScrollArea, QVBoxLayout
 )
 from src.utils.ListItem import ListItem
-from PySide2.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize
 from src.ui.styles import package_weight_check_button_style, upload_button_style
 
 class PacketWeightChecker(QMainWindow):

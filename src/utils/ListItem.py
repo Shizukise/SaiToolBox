@@ -1,5 +1,5 @@
-from PySide2.QtWidgets import QLabel
-from PySide2.QtCore import Qt,QSize, Signal
+from PySide6.QtWidgets import QLabel
+from PySide6.QtCore import Qt,QSize, Signal
 
 class ListItem(QLabel):
     clicked = Signal() 

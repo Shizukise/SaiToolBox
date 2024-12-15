@@ -1,13 +1,13 @@
 import sys
 import os
-from PySide2.QtCore import QSize, Qt
-from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QPushButton
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QPushButton
 from src.ui.ButtonShortcut import ShortcutButton
 from src.ui.PacketWeightCheck import PacketWeightChecker
 from src.ui.DiverArticle import Dive
 from src.ui.Resize import ResizePdf
 
-os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = r'/home/galopin/Área de Trabalho/Projects/Wa Its/Wa_its_venv/lib/python3.11/site-packages/PySide2/Qt/plugins/platforms'
+os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = r'/home/galopin/Wa Its/Wa_its_venv/lib/python3.11/site-packages/PySide6/Qt/plugins'
 
 class MainWindow(QMainWindow):
     def __init__(self):

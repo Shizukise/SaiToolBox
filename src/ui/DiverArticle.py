@@ -1,8 +1,8 @@
-from PySide2.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QComboBox,
     QMainWindow,QFrame,QApplication,
 )
-from PySide2.QtCore import Qt
+from PySide6.QtCore import Qt
 from src.controllers.DiveScript import DiverScraper
 import pandas as pd
 from src.ui.styles import *
