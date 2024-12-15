@@ -18,9 +18,9 @@ class DiverScraper():
         self.password = password
         self.team = team
         self.service = Service(ChromeDriverManager().install())
-        self.options = Options()
-        self.options.add_argument("--start-maximized")  
+        self.options = Options() 
         self.options.add_argument("--disable-notifications")
+        self.options.add_argument("--headless") 
         self.driver = webdriver.Chrome(service=self.service)
         self.specific_materials = set(["Dibond", "Dibond", "Dibond", "Plexi", "PVC3MM","entretoises"])
 
