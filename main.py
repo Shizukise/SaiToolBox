@@ -32,12 +32,12 @@ class MainWindow(QMainWindow):
         button_row_2.setSpacing(20)
 
        
-        button1 = ShortcutButton(text="OBLI", window=self, widget=packet_weight_checker, color="#ff661a")
+        button1 = ShortcutButton(text="DIVE", window=self, widget=dive, color="#00ADB5")
         button2 = ShortcutButton(text="RESIZE", window=self, widget=resize_pdf,  color="#E84545")
-        button3 = ShortcutButton(text="PERCE", window=self, color="#e600e6")
-        button4 = ShortcutButton(text="DIVE", window=self, widget=dive, color="#00ADB5")
-        button5 = ShortcutButton(text="Widget5", window=self)
-        button6 = ShortcutButton(text="Widget6", window=self)
+        button3 = ShortcutButton(text="Widget", window=self)
+        button4 = ShortcutButton(text="Widget", window=self)
+        button5 = ShortcutButton(text="Widget", window=self)
+        button6 = ShortcutButton(text="Widget", window=self)
 
        
         button_row_1.addWidget(button1)
