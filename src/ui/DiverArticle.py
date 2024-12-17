@@ -54,7 +54,7 @@ class Dive(QMainWindow):
         team_label = QLabel("Select Team:")
         self.team_selector = QComboBox()
         self.team_selector.setStyleSheet(combo_box_style)
-        self.team_selector.addItems(["Tous", "Jeremy", "Tepea", "Aurelien"])
+        self.team_selector.addItems(["Jeremy", "Tepea", "Aurelien"])
         input_layout.addWidget(team_label)
         input_layout.addWidget(self.team_selector)
 

@@ -1,9 +1,7 @@
-import sys
 import os
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QPushButton
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame
 from src.ui.ButtonShortcut import ShortcutButton
-from src.ui.PacketWeightCheck import PacketWeightChecker
 from src.ui.DiverArticle import Dive
 from src.ui.Resize import ResizePdf
 
@@ -96,9 +94,6 @@ class MainWindow(QMainWindow):
 
 # Main app, this runs the main loop! no widgets can be defined before this runs (this means no standalone widgets can be defined in other files)
 app = QApplication([])
-
-# This creates the widget for the packet weight checker
-packet_weight_checker = PacketWeightChecker()
 resize_pdf = ResizePdf()
 dive = Dive()
 
