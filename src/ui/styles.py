@@ -191,3 +191,34 @@ resize_button_style = """
         background-color: #C43131;
     }
 """
+
+run_button_styleT = """
+    QPushButton {
+        background-color: #4287f5; /* Blue color */
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        padding: 12px 24px;
+        border: none;
+    }
+
+    QPushButton:hover {
+        background-color: #306ecc; /* Darker blue for hover */
+    }
+
+    QPushButton:pressed {
+        background-color: #244b8a; /* Even darker blue for pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #d0d7e3; /* Light grey-blue for disabled */
+        color: #666666;
+        border: none;
+    }
+"""
+window_style = """
+    QWidget {
+        background-color: #1E1E1E;
+    }
+"""

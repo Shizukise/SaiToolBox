@@ -17,6 +17,7 @@ class ResizePdf(QMainWindow):
         self.names = {}  # Dictionary for storing file names and their corresponding ListItems
         self.currently_selected = {}  # Dictionary for keeping track of selected files
         self.currently_selected_label = f"Actuellement {len(self.currently_selected)} fichiers sélectionnés"  # Label to display the number of selected files
+        
 
         # Create the central widget for the window
         central_widget = QWidget(self)

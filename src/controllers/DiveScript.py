@@ -73,16 +73,16 @@ class DiverScraper:
                 EC.element_to_be_clickable((By.XPATH, "//span[text()='BAT validé']"))
             )
             option_bat_valide.click()
-
-            # Open team filter and select specified team
-            groupe_button = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//button[@data-id='filter-designer-group']"))
-            )
-            groupe_button.click()
-            team_select = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, f"//span[text()='{self.team}']"))
-            )
-            team_select.click()
+            if self.team != "Tous":
+                # Open team filter and select specified team
+                groupe_button = WebDriverWait(self.driver, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, "//button[@data-id='filter-designer-group']"))
+                )
+                groupe_button.click()
+                team_select = WebDriverWait(self.driver, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, f"//span[text()='{self.team}']"))
+                )
+                team_select.click()
         except Exception as e:
             print(f"Erreur lors de l'application des filtres : {e}")
 
@@ -95,9 +95,8 @@ class DiverScraper:
                 EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'OK') or contains(text(),'Valider') or contains(text(),'Fermer')]"))
             )
             popup_button.click()
-            print("Pop-up fermé avec succès.")
-        except:
-            print("Aucun pop-up à fermer.")
+        except Exception as e:
+            print(f"{e}")
 
     def scrape_data_from_order_page(self, commande_id):
         """
@@ -154,7 +153,7 @@ class DiverScraper:
             # Navigate through pages
             while True:
                 commande_elements = self.driver.find_elements(By.XPATH, "//a[contains(@href, '/commande/view/')]")
-
+                print(len(commande_elements))
                 for element in commande_elements:
                     commande_url = element.get_attribute("href")
                     commande_id = element.text
