@@ -152,9 +152,10 @@ class DiverScraper:
         try:
             # Navigate through pages
             while True:
+                WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, "//a[contains(@href, '/commande/view/')]")))
                 commande_elements = self.driver.find_elements(By.XPATH, "//a[contains(@href, '/commande/view/')]")
-                print(len(commande_elements))
-                for element in commande_elements:
+                for idx,element in enumerate(commande_elements):
+
                     commande_url = element.get_attribute("href")
                     commande_id = element.text
 
@@ -168,11 +169,15 @@ class DiverScraper:
 
                     self.driver.close()
                     self.driver.switch_to.window(self.driver.window_handles[0])
-
+                    print(f"{idx} of {len(commande_elements)}")
                 # Handle pagination
                 try:
-                    next_button = self.driver.find_element(By.XPATH, "//a[@title='Page Suivante']")
+                    next_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[@title='Page Suivante']")))
                     next_button.click()
+                    # Check if the button is disabled
+                    if "disabled" in next_button.get_attribute("class") or not next_button.is_enabled():
+                        print("Pagination button is disabled. Last page reached.")
+                        break
                     time.sleep(3)
                     current_page += 1
                 except:
